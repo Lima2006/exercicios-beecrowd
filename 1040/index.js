@@ -64,6 +64,8 @@ const answer = [
 ];
 
 presentAnswer(answer);
+
+O meu erro no código abaixo foi esquecer de colocar o valor inicial no método reduce()
  */
 
 const splitGradesAndNumber = () => {
