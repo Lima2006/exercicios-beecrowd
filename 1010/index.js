@@ -1,22 +1,38 @@
 const filePath = require("path").resolve(__dirname, "./stdin.txt");
 const input = require("fs").readFileSync(filePath, "utf8");
 const lines = input.split("\n");
+const { evaluateAll } = require("../utils");
 
-const [a, b] = [lines[0].split(" "), lines[1].split(" ")];
+const samples = [
+  {
+    input: "12 1 5.30\n16 2 5.10",
+    output: ["VALOR A PAGAR: R$ 15.50"],
+  },
+  {
+    input: "13 2 15.30\n161 4 5.20",
+    output: ["VALOR A PAGAR: R$ 51.40"],
+  },
+  {
+    input: "1 1 15.10\n2 1 15.10",
+    output: ["VALOR A PAGAR: R$ 30.20"],
+  },
+];
 
-for (let i = 0; i < a.length; i++) {
-  a[i] = Number(a[i]);
-}
+const resolution = (lines, console) => {
+  const convertLineToProduct = (line) => {
+    const [code, amount, price] = line.split(" ").map(Number);
+    return { code, amount, price };
+  };
+  const adaptParams = (lines) =>
+    lines.filter(Boolean).map(convertLineToProduct);
+  const totalizeValueToPay = (products) => {
+    return products.reduce((acc, { amount, price }) => acc + amount * price, 0);
+  };
+  const formatAnswer = (answer) => `VALOR A PAGAR: R$ ${answer.toFixed(2)}`;
 
-for (let i = 0; i < b.length; i++) {
-  b[i] = Number(b[i]);
-}
+  const products = adaptParams(lines);
+  const valueToPay = totalizeValueToPay(products);
+  console.log(formatAnswer(valueToPay));
+};
 
-function total([aQua, aVal], [bQua, bVal]) {
-  const aTot = aQua * aVal;
-  const bTot = bQua * bVal;
-  const result = aTot + bTot;
-  return `R$ ${result.toFixed(2)}`;
-}
-
-console.log(`VALOR A PAGAR: ${total(a.slice(1, 3), b.slice(1, 3))}`);
+console.table(evaluateAll(resolution, samples));
