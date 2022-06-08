@@ -35,4 +35,4 @@ const resolution = (lines, console) => {
   console.log(formatAnswer(valueToPay));
 };
 
-console.table(evaluateAll(resolution, samples));
+evaluateAll(resolution, samples)

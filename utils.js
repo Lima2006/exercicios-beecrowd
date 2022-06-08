@@ -32,7 +32,9 @@ const evaluateSingle = (resolution, sample) => {
 };
 
 const evaluateAll = (resolution, samples) => {
-  return samples.map((sample) => evaluateSingle(resolution, sample));
+  return console.table(
+    samples.map((sample) => evaluateSingle(resolution, sample))
+  );
 };
 
 module.exports = {
