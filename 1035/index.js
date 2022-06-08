@@ -9,16 +9,17 @@ const samples = [
 ];
 
 const resolution = (lines, console) => {
-  const convertLineToNumbers = (input) =>
-    input.filter(Boolean);
+  const convertLineToNumbers = (input) => input.split(" ").map(Number);
+  const adaptValues = (input) =>
+    input.filter(Boolean).map(convertLineToNumbers)[0];
   const calcSelectionTest = ([a, b, c, d]) =>
     b > c && d > a && c + d > a + b && c > 0 && d > 0 && a % 2 === 0;
   const formatAnswer = (status) =>
     status ? "Valores aceitos" : "Valores nao aceitos";
 
-  const values = convertLineToNumbers(lines);
+  const values = adaptValues(lines);
   const answer = calcSelectionTest(values);
   console.log(formatAnswer(answer));
 };
 
-console.table(evaluateAll(resolution, samples));
+evaluateAll(resolution, samples);
