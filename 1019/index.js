@@ -22,7 +22,11 @@ const resolution = (lines, console) => {
 
   const seconds = Number(lines[0]);
   const calculatedTime = calcTime(seconds);
-  const answer = [calculatedTime.hours, calculatedTime.minutes, calculatedTime.seconds]
+  const answer = [
+    calculatedTime.hours,
+    calculatedTime.minutes,
+    calculatedTime.seconds,
+  ];
 
   console.log(formatAnswer(...answer));
 };
