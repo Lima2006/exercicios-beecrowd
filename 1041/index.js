@@ -11,12 +11,12 @@ const splitAndNumber = (input) => {
 };
 const whichQuadrant = ([x, y]) => {
   if (x === 0 && y === 0) return "Origem";
-  else if (x === 0) return "Eixo Y";
-  else if (y === 0) return "Eixo X";
-  else if (x > 0 && y > 0) return "Q1";
-  else if (x < 0 && y > 0) return "Q2";
-  else if (x < 0 && y < 0) return "Q3";
-  else if (x > 0 && y < 0) return "Q4";
+  if (x === 0) return "Eixo Y";
+  if (y === 0) return "Eixo X";
+  if (x > 0 && y > 0) return "Q1";
+  if (x < 0 && y > 0) return "Q2";
+  if (x < 0 && y < 0) return "Q3";
+  if (x > 0 && y < 0) return "Q4";
 };
 const presentAnswer = (answer) => console.log(answer);
 
