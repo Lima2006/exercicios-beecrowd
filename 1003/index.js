@@ -2,6 +2,11 @@ const filePath = require("path").resolve(__dirname, "./stdin.txt");
 const input = require("fs").readFileSync(filePath, "utf8");
 const lines = input.split("\n");
 
-const soma = lines.map(Number).reduce((total, atual) => total + atual, 0);
+const adaptInput = (input) => input.filter(Boolean).map(Number);
+const sum = (...values) => values.reduce((acc, val) => acc + val, 0);
+const formatAnswer = (answer) => `SOMA = ${answer}`
 
-console.log(`SOMA = ${soma}`);
+const values = adaptInput(lines)
+const answer = sum(...values)
+
+console.log(formatAnswer(answer));
