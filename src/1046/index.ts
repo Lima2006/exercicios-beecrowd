@@ -1,14 +1,16 @@
+import { resolutionType } from "../types/resolution-type";
+
 const filePath = require("path").resolve(__dirname, "./stdin.txt");
 const input = require("fs").readFileSync(filePath, "utf8");
 const lines = input.split("\n");
 
 type gameDurationType = (params: { start: number; end: number }) => number;
 
-const resolution = (lines: string[], console: Console) => {
+const resolution: resolutionType = (lines, console) => {
   const splitNumbersBySpace = (input: string) => input.split(" ").map(Number);
 
   const gameDuration: gameDurationType = ({ start, end }) => {
-    const isOtherDay = (end - start) < 0;
+    const isOtherDay = end - start < 0;
     if (isOtherDay) {
       return end + 24 - start;
     }
@@ -28,4 +30,3 @@ const resolution = (lines: string[], console: Console) => {
 };
 
 resolution(lines, console);
-

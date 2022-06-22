@@ -1,0 +1,1 @@
+export type resolutionType = (lines: string[], console: Console) => void
