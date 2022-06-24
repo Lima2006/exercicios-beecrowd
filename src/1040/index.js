@@ -2,6 +2,71 @@ const filePath = require("path").resolve(__dirname, "./stdin.txt");
 const input = require("fs").readFileSync(filePath, "utf8");
 const lines = input.split("\n");
 
+const splitGradesAndNumber = () => {
+  let grades = lines[0].split(" ");
+  for (let i in grades) {
+    grades[i] = Math.round(parseFloat(grades[i]) * 10) / 10;
+  }
+  return grades;
+};
+const grades = {
+  main: splitGradesAndNumber(),
+  load: [2, 3, 4, 1],
+  exam: parseFloat(lines[1]),
+};
+
+const calcAverageGrade = (grade, load) => {
+  let result = 0;
+  grade.forEach((val, i) => result = Math.round((result + val * load[i]) * 10) / 10);
+  return result / load.reduce((oldValue, newValue) => oldValue + newValue, 0);
+};
+const calcExamValues = (averageGrade, examGrade) => {
+  const finalGrade = calcAverageGrade([averageGrade, examGrade], [1, 1]);
+  let result = "";
+  if (finalGrade >= 5.0) {
+    result = "aprovado";
+  } else if (finalGrade < 5.0) {
+    result = "reprovado";
+  }
+  return { finalGrade: finalGrade, result: result };
+};
+const isApproved = (averageGrade) => {
+  if (averageGrade >= 7.0) return "aprovado";
+  if (averageGrade < 7.0 && averageGrade >= 5.0) return "em exame";
+  if (averageGrade < 5.0) return "reprovado";
+};
+const calcStudentData = (grades) => {
+  const averageGrade = calcAverageGrade(grades.main, grades.load);
+  const examValues = calcExamValues(averageGrade, grades.exam);
+  const result = {
+    averageGrade: averageGrade,
+    initialStatus: isApproved(averageGrade),
+  };
+  if (result.initialStatus === "em exame") {
+    result.examGrade = grades.exam;
+    result.finalStatus = examValues.result;
+    result.finalGrade = examValues.finalGrade;
+  }
+  return result;
+};
+const formattedAnswer = (answer) => {
+  if (answer.initialStatus === "em exame") {
+    return `Media: ${answer.averageGrade.toFixed(1)}\nAluno ${
+      answer.initialStatus
+    }.\nNota do exame: ${answer.examGrade.toFixed(1)}\nAluno ${
+      answer.finalStatus
+    }.\nMedia final: ${answer.finalGrade.toFixed(1)}`;
+  }
+  return `Media: ${answer.averageGrade.toFixed(1)}\nAluno ${
+    answer.initialStatus
+  }.`;
+};
+const presentAnswer = (answer) => console.log(formattedAnswer(answer));
+
+const answer = calcStudentData(grades);
+
+presentAnswer(answer);
+
 /* const grades = lines[0].split(" ");
 const grade = {
   exam: lines[1],
@@ -67,68 +132,3 @@ presentAnswer(answer);
 
 O meu erro no código abaixo foi esquecer de colocar o valor inicial no método reduce()
  */
-
-const splitGradesAndNumber = () => {
-  let grades = lines[0].split(" ");
-  for (let i in grades) {
-    grades[i] = Math.round(parseFloat(grades[i]) * 10) / 10;
-  }
-  return grades;
-};
-const grades = {
-  main: splitGradesAndNumber(),
-  load: [2, 3, 4, 1],
-  exam: parseFloat(lines[1]),
-};
-
-const calcAverageGrade = (grade, load) => {
-  let result = 0;
-  grade.forEach((val, i) => result = Math.round((result + val * load[i]) * 10) / 10);
-  return result / load.reduce((oldValue, newValue) => oldValue + newValue, 0);
-};
-const calcExamValues = (averageGrade, examGrade) => {
-  const finalGrade = calcAverageGrade([averageGrade, examGrade], [1, 1]);
-  let result = "";
-  if (finalGrade >= 5.0) {
-    result = "aprovado";
-  } else if (finalGrade < 5.0) {
-    result = "reprovado";
-  }
-  return { finalGrade: finalGrade, result: result };
-};
-const isApproved = (averageGrade) => {
-  if (averageGrade >= 7.0) return "aprovado";
-  else if (averageGrade < 7.0 && averageGrade >= 5.0) return "em exame";
-  else if (averageGrade < 5.0) return "reprovado";
-};
-const calcStudentData = (grades) => {
-  const averageGrade = calcAverageGrade(grades.main, grades.load);
-  const examValues = calcExamValues(averageGrade, grades.exam);
-  const result = {
-    averageGrade: averageGrade,
-    initialStatus: isApproved(averageGrade),
-  };
-  if (result.initialStatus === "em exame") {
-    result.examGrade = grades.exam;
-    result.finalStatus = examValues.result;
-    result.finalGrade = examValues.finalGrade;
-  }
-  return result;
-};
-const formattedAnswer = (answer) => {
-  if (answer.initialStatus === "em exame") {
-    return `Media: ${answer.averageGrade.toFixed(1)}\nAluno ${
-      answer.initialStatus
-    }.\nNota do exame: ${answer.examGrade.toFixed(1)}\nAluno ${
-      answer.finalStatus
-    }.\nMedia final: ${answer.finalGrade.toFixed(1)}`;
-  }
-  return `Media: ${answer.averageGrade.toFixed(1)}\nAluno ${
-    answer.initialStatus
-  }.`;
-};
-const presentAnswer = (answer) => console.log(formattedAnswer(answer));
-
-const answer = calcStudentData(grades);
-
-presentAnswer(answer);
