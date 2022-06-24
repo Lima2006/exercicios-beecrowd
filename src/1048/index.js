@@ -1,6 +1,5 @@
 const filePath = require("path").resolve(__dirname, "./stdin.txt");
 const input = require("fs").readFileSync(filePath, "utf8");
-const { isConstructorDeclaration } = require("typescript");
 const { transformTextToSmples, evaluateAll } = require("../utils");
 
 const samples = transformTextToSmples(input);
