@@ -1,7 +1,7 @@
 const filePath = require("path").resolve(__dirname, "./stdin.txt");
 const input = require("fs").readFileSync(filePath, "utf8");
 const lines = input.split("\n");
-const { evaluateAll } = require("../utils.ts");
+const { evaluateAll } = require("../utils");
 
 const samples = [
   { input: "6 24\n", output: ["Sao Multiplos"] },
