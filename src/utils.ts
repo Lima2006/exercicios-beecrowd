@@ -27,12 +27,13 @@ const isCorrect: isCorrectType = (output, answer) =>
  * @param {{input: String[], output: String[]}} sample
  * @returns {{status: String, input: String, output: String[], answer: String[]}}
  */
+type sampleType = { input: string; output: string[] };
 type evaluateSingleType = (
   resolution: (
     lines: string[],
     console: { log: ConsoleType; logs: string[] }
   ) => void,
-  sample: { input: string; output: string[] }
+  sample: sampleType
 ) => { status: string; input: string; output: string[]; answer: string[] };
 const evaluateSingle: evaluateSingleType = (resolution, sample) => {
   const lines = sample.input.split("\n");
@@ -48,13 +49,60 @@ type evaluateAllType = (
     lines: string[],
     console: { log: ConsoleType; logs: string[] }
   ) => void,
-  samples: { input: string; output: string[] }[]
+  samples: sampleType[]
 ) => void;
 const evaluateAll: evaluateAllType = (resolution, samples) => {
   return console.table(
-    samples.map((sample: { input: string; output: string[] }) =>
-      evaluateSingle(resolution, sample)
-    )
+    samples.map((sample: sampleType) => evaluateSingle(resolution, sample))
+  );
+};
+
+// Beecrowd table transformer
+
+type adaptBeecrowdTableTextToArrayType = (prop: string) => string[];
+const adaptBeecrowdTableTextToArray: adaptBeecrowdTableTextToArrayType = (
+  text
+) => text.split("\r\n");
+
+type groupInputsAndOutputsType = (prop: string[]) => string[][];
+type grouperFunctionInitialState = {
+  currentArray: string[];
+  result: string[][];
+};
+const groupInputsAndOutputs: groupInputsAndOutputsType = (input) => {
+  const initialState: grouperFunctionInitialState = {
+    currentArray: [],
+    result: [],
+  };
+  return input.reduce((acc: grouperFunctionInitialState, item: string) => {
+    if (item) {
+      acc.currentArray.push(item);
+    } else {
+      acc.result.push(acc.currentArray);
+      acc.currentArray = [];
+    }
+    return acc;
+  }, initialState).result;
+};
+
+type sortInputAndOutputType = (param: string[][]) => sampleType[];
+const sortInputAndOutput: sortInputAndOutputType = (input) => {
+  const samples: sampleType[] = [];
+  const copyInput = input.slice();
+  while (copyInput.length > 0) {
+    samples.push({
+      input: copyInput.shift()?.join("\n") + "\n",
+      output: [copyInput.shift()?.join("\n") || ""],
+    });
+  }
+
+  return samples;
+};
+
+type transformTextToSmplesType = (prop: string) => sampleType[];
+const transformTextToSmples: transformTextToSmplesType = (text) => {
+  return sortInputAndOutput(
+    groupInputsAndOutputs(adaptBeecrowdTableTextToArray(text))
   );
 };
 
@@ -63,4 +111,5 @@ module.exports = {
   isCorrect,
   evaluateSingle,
   evaluateAll,
+  transformTextToSmples,
 };
