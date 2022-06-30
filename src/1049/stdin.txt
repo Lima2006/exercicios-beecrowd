@@ -1,0 +1,17 @@
+vertebrado
+mamifero
+onivoro
+
+homem
+
+vertebrado
+ave
+carnivoro
+
+aguia
+
+invertebrado
+anelideo
+onivoro
+
+minhoca
