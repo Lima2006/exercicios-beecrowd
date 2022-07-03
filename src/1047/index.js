@@ -1,9 +1,9 @@
 const filePath = require("path").resolve(__dirname, "./stdin.txt");
 const input = require("fs").readFileSync(filePath, "utf8");
 const lines = input.split("\n");
-const { transformTextToSmples, evaluateAll } = require("../utils");
+const { transformTextToSamples, evaluateAll } = require("../utils");
 
-const samples = transformTextToSmples(input);
+const samples = transformTextToSamples(input);
 
 const resolution = (lines, console) => {
   const adaptInput = (input) => input.split(" ").map(Number);

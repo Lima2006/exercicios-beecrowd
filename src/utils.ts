@@ -99,8 +99,8 @@ const sortInputAndOutput: sortInputAndOutputType = (input) => {
   return samples;
 };
 
-type transformTextToSmplesType = (prop: string) => sampleType[];
-const transformTextToSmples: transformTextToSmplesType = (text) => {
+type transformTextToSamplesType = (prop: string) => sampleType[];
+const transformTextToSamples: transformTextToSamplesType = (text) => {
   return sortInputAndOutput(
     groupInputsAndOutputs(adaptBeecrowdTableTextToArray(text))
   );
@@ -111,5 +111,5 @@ module.exports = {
   isCorrect,
   evaluateSingle,
   evaluateAll,
-  transformTextToSmples,
+  transformTextToSamples,
 };

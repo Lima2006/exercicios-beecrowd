@@ -1,8 +1,8 @@
 const filePath = require("path").resolve(__dirname, "./stdin.txt");
 const input = require("fs").readFileSync(filePath, "utf8");
-const { evaluateAll, transformTextToSmples } = require("../utils");
+const { evaluateAll, transformTextToSamples } = require("../utils");
 
-const samples = transformTextToSmples(input);
+const samples = transformTextToSamples(input);
 
 const dddList = {
   61: "Brasilia",
